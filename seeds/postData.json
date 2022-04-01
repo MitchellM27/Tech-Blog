@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Javascript",
+    "contents": "I've been learning Javascript and it's amazing.",
+    "date_created": "April 9, 2022 08:00:00",
+    "user_id": 1
+  },
+  {
+    "name": "HTML",
+    "contents": "I've been sharpening my html skills.",
+    "date_created": "April 20, 2022 09:00:00",
+    "user_id": 2
+  },
+  {
+    "name": "CSS",
+    "contents": "It's crazy how many different styles we can implement on our work.",
+    "date_created": "April 4, 2022 12:00:00",
+    "user_id": 3
+  }
+]
