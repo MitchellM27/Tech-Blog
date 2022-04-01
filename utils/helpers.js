@@ -1,6 +1,12 @@
 module.exports = {
   format_date: (date) => {
-    // Format date as MM/DD/YYYY
-    return date.toLocaleDateString();
+    return date.toLocaleString(undefined, {
+      weekday: 'short',
+      day:    'numeric',
+      month:  'numeric',
+      year:   'numeric',
+      hour:   '2-digit',
+      minute: '2-digit',
+  });
   },
 };
