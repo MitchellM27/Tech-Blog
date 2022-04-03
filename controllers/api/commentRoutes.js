@@ -18,14 +18,12 @@ router.post('/', withAuth, async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    const commentData = await Comment.findAll(
-      include [{model: Post}]
-    )
+    const commentData = await Comment.findAll()
 
     res.status(200).json(commentData);
     
   } catch (err) {
-    res.render("homepage");
+    res.status(400).json(err);
   }
 });
 
