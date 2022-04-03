@@ -47,21 +47,46 @@ router.get('/post/:id', async (req, res) => {
   }
 });
 
-router.get('/profile', withAuth, async (req, res) => {
-  try {
-    const userData = await User.findByPk(req.session.user_id, {
-      attributes: { exclude: ['password'] },
-      include: [{ model: Post }],
+// router.get('/profile', withAuth, async (req, res) => {
+//   try {
+//     const userData = await User.findByPk(req.session.user_id, {
+//       attributes: { exclude: ['password'] },
+//       include: [{ model: Post }],
+//     });
+
+//     const username = userData.dataValues.name;
+//     const user = userData.get({ plain: true });
+
+//     res.render('profile', {
+//       ...user,
+//       username,
+//       logged_in: true
+//     });
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
+
+router.get("/profile", async (req, res) => {
+  if (req.session.logged_in) {
+    const userData = await User.findOne({where: {id: req.session.user_id}})
+    const username = userData.dataValues.name
+    const postData = await Post.findAll({
+      where: {
+          user_id: req.session.user_id
+           },
     });
 
-    const user = userData.get({ plain: true });
-
-    res.render('profile', {
-      ...user,
-      logged_in: true
+    const posts = postData.map((post) => post.get({ plain: true }));
+    console.log(username)
+    res.render("profile", {
+      posts,
+      username,
+      logged_in: req.session.logged_in,
+      user_id: req.session.user_id,
     });
-  } catch (err) {
-    res.status(500).json(err);
+  } else {
+    res.render("homepage");
   }
 });
 
