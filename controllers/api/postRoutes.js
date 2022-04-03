@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Post , User} = require('../../models');
+const { Post , User, Comment} = require('../../models');
 const withAuth = require('../../utils/auth');
 
 router.post('/', withAuth, async (req, res) => {
@@ -39,17 +39,41 @@ router.delete('/:id', withAuth, async (req, res) => {
   }
 });
 
-router.get('/:id', withAuth, async (req, res) => {
+// router.get("/:id", async (req, res) => {
+//   try {
+//     const commentData = await Comment.findAll({where: {post_id: req.params.id}})
+//     const postData = await Post.findOne({where: {post_id: req.params.id}})
+//     const username = req.session.username
+
+//     const comments = commentData.map((comment) => comment.get({ plain: true }));
+//     res.render("post", {
+//       postData,
+//       comments,
+//       username,
+//       user_id: req.session.user_id,
+//     });
+//   } catch (err) {
+//     res.render("homepage");
+//   }
+// });
+
+router.get("/:id", async (req, res) => {
   try {
-    const postData = await Task.findByPk(req.params.id)
-    res.render('post', {
-      postData,
-      logged_in: req.session.logged_in,
-      include: [{model : User}],
+    const postData = await Post.findByPk(req.params.id, {
+      include: [{model: Comment},
+         { model: User,
+        attributes: ['name'], }]
     })
-  } catch(err) {
-res.status(500).json(err)
+
+    const post = postData.get({ plain: true });
+
+    res.render('post', { 
+      ...post, 
+    });
+    // res.status(200).json(post);
+  } catch (err) {
+    res.status(500).json(err);
   }
-})
+});
 
 module.exports = router;
