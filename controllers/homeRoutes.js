@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/post/:id', async (req, res) => {
+router.get('/post/:id', withAuth, async (req, res) => {
   try {
     const postData = await Post.findByPk(req.params.id, {
       include: [
@@ -67,7 +67,7 @@ router.get('/post/:id', async (req, res) => {
 //   }
 // });
 
-router.get("/profile", async (req, res) => {
+router.get("/profile", withAuth, async (req, res) => {
   if (req.session.logged_in) {
     const userData = await User.findOne({where: {id: req.session.user_id}})
     const username = userData.dataValues.name
